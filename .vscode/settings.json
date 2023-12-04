@@ -1,0 +1,9 @@
+{
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "string": "cpp",
+        "xstring": "cpp",
+        "regex": "cpp",
+        "vector": "cpp"
+    }
+}
