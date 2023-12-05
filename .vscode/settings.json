@@ -6,6 +6,7 @@
         "regex": "cpp",
         "vector": "cpp",
         "map": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     }
 }

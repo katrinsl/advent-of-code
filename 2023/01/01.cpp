@@ -10,7 +10,6 @@ using namespace std;
 map<string, int> setMap()
 {
     map<string, int> nrMap;
-    nrMap["zero"] = 0;
     nrMap["one"] = 1;
     nrMap["two"] = 2;
     nrMap["three"] = 3;
@@ -34,8 +33,8 @@ int main()
     }
 
     string line;
-    string regStrLine = "[0-9]|one|two|three|four|five|six|seven|eight|nine";
-    regex const reg(regStrLine);
+    string regStrLine = "([0-9])|(?=(one))|(?=(two))|(?=(three))|(?=(four))|(?=(five))|(?=(six))|(?=(seven))|(?=(eight))|(?=(nine))";
+    regex const reg_exp(regStrLine);
     const sregex_iterator end;
 
     int totalNr = 0;
@@ -45,23 +44,32 @@ int main()
     {
         vector<string> matches;
 
-        for (sregex_iterator i(line.begin(), line.end(), reg); i != end; i++)
+        for (sregex_iterator i(line.begin(), line.end(), reg_exp); i != end; ++i)
         {
-            string itemValue = i->str();
-            if (nrMap[itemValue])
+            smatch regmatch = *i;
+            if (regmatch.size())
             {
-                matches.push_back(to_string(nrMap[itemValue]));
-            }
-            else
-            {
-                matches.push_back(itemValue);
+                for (size_t i = 1; i < regmatch.size(); ++i)
+                {
+                    if (regmatch[i].str().length())
+                    {
+                        string itemValue = regmatch[i].str();
+                        // cout << "Value: " << itemValue << endl;
+                        matches.push_back(itemValue);
+                    }
+                }
             }
         }
 
-        cout << matches[0] << matches[matches.size() -1] << endl;
-        string numberStr = matches[0] + matches[matches.size() - 1];
-
-        totalNr += stoi(numberStr);
+        for(int i = 0; i < matches.size(); ++i){
+            string value = matches[i];
+            if(nrMap[value]){
+                matches[i] = to_string(nrMap[value]);
+            }
+            // cout << "Matches[" << i << "]: " << matches[i] << endl;
+        }
+        string numberString = matches[0] + matches[matches.size() - 1];
+        totalNr += stoi(numberString);
     }
 
     cout << totalNr << endl;
