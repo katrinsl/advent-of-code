@@ -4,6 +4,8 @@
         "string": "cpp",
         "xstring": "cpp",
         "regex": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "map": "cpp",
+        "iostream": "cpp"
     }
 }

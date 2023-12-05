@@ -1,9 +1,28 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <iterator>
 #include <string>
 #include <regex>
+#include <map>
 
 using namespace std;
+
+map<string, int> setMap()
+{
+    map<string, int> nrMap;
+    nrMap["zero"] = 0;
+    nrMap["one"] = 1;
+    nrMap["two"] = 2;
+    nrMap["three"] = 3;
+    nrMap["four"] = 4;
+    nrMap["five"] = 5;
+    nrMap["six"] = 6;
+    nrMap["seven"] = 7;
+    nrMap["eight"] = 8;
+    nrMap["nine"] = 9;
+
+    return nrMap;
+}
 
 int main()
 {
@@ -15,20 +34,31 @@ int main()
     }
 
     string line;
-    string regStrLine = "|(\bone\b)|(\two\b)|(\bthree\b)|(\bfour\b)|(\bfive\b)|(\bsix\b)|(\bseven\b)|(\beight\b)|(\bnine\b)";
-    regex const reg("([0-9])");
-    const sregex_token_iterator end;
+    string regStrLine = "[0-9]|one|two|three|four|five|six|seven|eight|nine";
+    regex const reg(regStrLine);
+    const sregex_iterator end;
 
     int totalNr = 0;
+    map<string, int> nrMap = setMap();
 
     while (getline(inputfile, line))
     {
         vector<string> matches;
 
-        for (sregex_token_iterator i(line.cbegin(), line.cend(), reg, 1); i != end; i++)
+        for (sregex_iterator i(line.begin(), line.end(), reg); i != end; i++)
         {
-            matches.push_back(*i);
+            string itemValue = i->str();
+            if (nrMap[itemValue])
+            {
+                matches.push_back(to_string(nrMap[itemValue]));
+            }
+            else
+            {
+                matches.push_back(itemValue);
+            }
         }
+
+        cout << matches[0] << matches[matches.size() -1] << endl;
         string numberStr = matches[0] + matches[matches.size() - 1];
 
         totalNr += stoi(numberStr);
